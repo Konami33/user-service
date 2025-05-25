@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Redis = require('redis');
 const logger = require('./logger');
 
