@@ -7,10 +7,8 @@
 ```bash
 curl -X POST http://localhost:3000/api/users \
   -H "Content-Type: application/json" \
-  -d '{"name": "Alice", "email": "alice@example.com"}' | jq
+  -d '{"name": "Alice", "email": "alice@example11.com"}' | jq
 ```
-
----
 
 ### ✅ 2. Get a Specific User (`GET /api/users/:id`)
 
