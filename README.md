@@ -5,9 +5,15 @@
 ### ✅ 1. Create a User (`POST /api/users`)
 
 ```bash
-curl -X POST http://localhost:3000/api/users \
+curl -X POST http://localhost:5000/api/users \
   -H "Content-Type: application/json" \
-  -d '{"name": "Alice", "email": "alice@example11.com"}' | jq
+  -d '{"name": "Alice", "email": "alice@example.com"}' | jq
+```
+
+```bash
+curl -X POST http://localhost:5000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Bob", "email": "bob@example.com"}' | jq
 ```
 
 ### ✅ 2. Get a Specific User (`GET /api/users/:id`)
@@ -15,7 +21,7 @@ curl -X POST http://localhost:3000/api/users \
 Replace `<id>` with the actual user ID returned from the POST request (e.g., `1`):
 
 ```bash
-curl http://localhost:3000/api/users/1 | jq
+curl http://localhost:5000/api/users/1 | jq
 ```
 
 ---
@@ -23,7 +29,7 @@ curl http://localhost:3000/api/users/1 | jq
 ### ✅ 3. Update a User (`PUT /api/users/:id`)
 
 ```bash
-curl -X PUT http://localhost:3000/api/users/3 \
+curl -X PUT http://localhost:5000/api/users/1 \
   -H "Content-Type: application/json" \
   -d '{"name": "Alice Updated", "email": "alice.updated@example.com"}' | jq
 ```
@@ -33,7 +39,7 @@ curl -X PUT http://localhost:3000/api/users/3 \
 ### ✅ 4. Delete a User (`DELETE /api/users/:id`)
 
 ```bash
-curl -X DELETE http://localhost:3000/api/users/1 | jq
+curl -X DELETE http://localhost:5000/api/users/1 | jq
 ```
 
 ---
@@ -41,6 +47,6 @@ curl -X DELETE http://localhost:3000/api/users/1 | jq
 ### ✅ 5. Get All Users (`GET /api/users`)
 
 ```bash
-curl http://localhost:3000/api/users | jq
+curl http://localhost:5000/api/users | jq
 ```
 
