@@ -24,8 +24,7 @@ class UserController {
         });
 
         //logger
-        logger.info(`User created: ${user.id}`, {
-          traceID: span.spanContext().traceID,
+        logger.info('User created', {
           userID: user.id
         });
 
@@ -33,7 +32,6 @@ class UserController {
       } catch (error) {
         logger.error('Error creating user:', {
           error: error.message,
-          traceId: span.spanContext().traceId,
           userID: req.body.id || 'unknown'
         });
         span.setStatus({
@@ -59,15 +57,13 @@ class UserController {
         const user = await userService.getUser(req.params.id);
 
         span.setAttribute(SemanticAttributes.HTTP_STATUS_CODE, 200);
-        logger.info(`User retrieved: ${req.params.id}`, {
-          traceId: span.spanContext().traceId,
+        logger.info('User retrieved:', {
           userId: req.params.id
         });
         res.json(user);
       } catch (error) {
         logger.error('Error getting user:', {
           error: error.message,
-          traceId: span.spanContext().traceId,
           userId: req.params.id
         });
         span.setStatus({
@@ -93,15 +89,13 @@ class UserController {
         const user = await userService.updateUser(req.params.id, req.body);
 
         span.setAttribute(SemanticAttributes.HTTP_STATUS_CODE, 200);
-        logger.info(`User updated: ${req.params.id}`, {
-          traceId: span.spanContext().traceId,
+        logger.info('User updated', {
           userId: req.params.id
         });
         res.json(user);
       } catch (error) {
         logger.error('Error updating user:', {
           error: error.message,
-          traceId: span.spanContext().traceId,
           userId: req.params.id
         });
         span.setStatus({
@@ -127,8 +121,7 @@ class UserController {
         await userService.deleteUser(req.params.id);
 
         span.setAttribute(SemanticAttributes.HTTP_STATUS_CODE, 204);
-        logger.info(`User deleted: ${req.params.id}`, {
-          traceId: span.spanContext().traceId,
+        logger.info('User deleted', {
           userId: req.params.id
         });
 
@@ -136,7 +129,6 @@ class UserController {
       } catch (error) {
         logger.error('Error deleting user:', {
           error: error.message,
-          traceId: span.spanContext().traceId,
           userId: req.params.id
         });
         span.setStatus({
@@ -163,14 +155,12 @@ class UserController {
         span.setAttribute(SemanticAttributes.HTTP_STATUS_CODE, 200);
         span.setAttribute('app.users.count', users.length);
         logger.info('Retrieved all users', {
-          traceId: span.spanContext().traceId,
           userCount: users.length
         });
         res.json(users);
       } catch (error) {
         logger.error('Error getting all users:', {
           error: error.message,
-          traceId: span.spanContext().traceId
         });
         span.setStatus({
           code: SpanStatusCode.ERROR,

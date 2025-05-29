@@ -15,12 +15,15 @@ services:
       - POSTGRES_DB=user_service
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4318/v1/logs
       - OTEL_SERVICE_NAME=user-service
     depends_on:
       - postgres
       - redis
       - tempo
+      - loki
+      - otel-collector
     networks:
       - app-network
 
@@ -51,6 +54,30 @@ services:
     networks:
       - app-network
 
+  loki:
+    image: grafana/loki:3.3.2
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - app-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - "4318:4318" # OTLP HTTP
+    depends_on:
+      - tempo
+      - loki
+    networks:
+      - app-network
+
 
   grafana:
     image: grafana/grafana:latest
@@ -62,8 +89,11 @@ services:
       - GF_AUTH_BASIC_ENABLED=true
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - tempo
+      - loki
     networks:
       - app-network
     healthcheck:
@@ -74,6 +104,7 @@ services:
 
 volumes:
   postgres-data:
+  loki-data:
 
 networks:
   app-network:

@@ -7,7 +7,7 @@
 ```bash
 curl -X POST http://localhost:5000/api/users \
   -H "Content-Type: application/json" \
-  -d '{"name": "Alice", "email": "alice@example.com"}' | jq
+  -d '{"name": "Alice", "email": "alice11@example.com"}' | jq
 ```
 
 ```bash
