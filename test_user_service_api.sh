@@ -14,11 +14,17 @@ user2=$(curl -s -X POST $BASE_URL \
   -H "Content-Type: application/json" \
   -d '{"name": "Bob", "email": "bob@example.com"}')
 
+user3=$(curl -s -X POST $BASE_URL \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Bob", "email": ""}')
+
 id1=$(echo "$user1" | jq -r '.id')
 id2=$(echo "$user2" | jq -r '.id')
+id3=$(echo "$user3" | jq -r '.id')
 
 echo "Created User 1: $user1"
 echo "Created User 2: $user2"
+echo "Created User 3: $user3"
 
 echo "==============================="
 echo "2. Get Specific User (ID: $id1)"
