@@ -1,8 +1,9 @@
 const { body, validationResult } = require('express-validator');
 const { trace, SpanStatusCode } = require('@opentelemetry/api');
-const { SemanticAttributes } = require('@opentelemetry/semantic-conventions');
 const logger = require('../config/logger');
 
+
+// exports an array of middlewares. name checking, email checking, and then the validation function.
 const validateRequest = [
   body('name').notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
@@ -12,10 +13,13 @@ const validateRequest = [
     const span = trace.getActiveSpan();
 
     try {
+
+      // set the attribute for the span
       if(span) {
         span.setAttribute('app.validation.path', req.originalUrl);
       }
 
+      // validate the request.
       const errors = validationResult(req);
 
       // error occured

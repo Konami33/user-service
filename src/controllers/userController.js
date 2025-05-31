@@ -9,7 +9,9 @@ class UserController {
       span.addEvent('User creation started');
       const user = await userService.createUser(req.body);
       span.setAttribute('app.user.id', user.id);
-      span.addEvent('User creation completed', { 'app.user.id': user.id });
+      span.addEvent('User creation completed', { 
+        'app.user.id': user.id 
+      });
 
       logger.info('User created', {
         userId: user.id,

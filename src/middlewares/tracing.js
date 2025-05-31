@@ -2,10 +2,13 @@ const { trace, SpanStatusCode } = require('@opentelemetry/api');
 const { SemanticAttributes } = require('@opentelemetry/semantic-conventions');
 
 function tracingMiddleware(req, res, next) {
+
+  // create a user-service tracer
   const tracer = trace.getTracer('user-service');
   
   // Get the route path (e.g., '/api/users/:id') or fallback to URL path
   const routePath = req.route ? req.route.path : req.path;
+  console.log("tracingMiddleware Invoked by ", routePath);
 
   // Start a span for the request
   return tracer.startActiveSpan(`${req.method} ${routePath}`, (span) => {
