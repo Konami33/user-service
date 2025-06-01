@@ -17,6 +17,7 @@ services:
       - REDIS_PORT=6379
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-collector:4318/v1/logs
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4318/v1/metrics
       - OTEL_SERVICE_NAME=user-service
     depends_on:
       - postgres
@@ -24,6 +25,7 @@ services:
       - tempo
       - loki
       - otel-collector
+      - prometheus
     networks:
       - app-network
 
@@ -75,6 +77,18 @@ services:
     depends_on:
       - tempo
       - loki
+      - prometheus
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
     networks:
       - app-network
 
@@ -94,6 +108,7 @@ services:
     depends_on:
       - tempo
       - loki
+      - prometheus
     networks:
       - app-network
     healthcheck:
@@ -105,6 +120,7 @@ services:
 volumes:
   postgres-data:
   loki-data:
+  prometheus-data:
 
 networks:
   app-network:

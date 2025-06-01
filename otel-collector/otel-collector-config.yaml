@@ -15,6 +15,9 @@ exporters:
     endpoint: "http://loki:3100/loki/api/v1/push"
     headers:
       X-Scope-OrgID: "1"
+  prometheus:
+    endpoint: "0.0.0.0:9091"
+    namespace: "user_service"
 
 processors:
   batch:
@@ -31,3 +34,7 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [loki]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
